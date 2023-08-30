@@ -9,6 +9,7 @@
     "filterset",
     "graphene",
     "graphiql",
+    "locationmode",
     "xiaoma"
   ]
 }
