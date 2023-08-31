@@ -5,11 +5,20 @@
   "python.formatting.provider": "none",
   "cSpell.words": [
     "asgi",
+    "codegen",
+    "cupertino",
+    "dotenv",
     "dropoff",
     "filterset",
+    "geolocator",
     "graphene",
     "graphiql",
     "locationmode",
+    "mobx",
+    "navs",
+    "pinput",
+    "polyline",
+    "typeahead",
     "xiaoma"
   ]
 }
