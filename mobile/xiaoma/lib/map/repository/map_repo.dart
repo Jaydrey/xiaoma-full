@@ -14,11 +14,11 @@ class MapsRepo {
     final params = {
       "input": query,
       "key": dotenv.env["XIAOMA_GOOGLE_API_KEY"],
-      "components": "country:ke",
+      // "components": "country:ke",
     };
     const endpoint =
         "${ApiSettings.autocompletionBase}/${ApiSettings.autocompletionPath}";
-    XiamaLogger.debugPrint(endpoint);
+    AppLogger.debugPrint(endpoint);
     try {
       final response = await dio.get(
         endpoint,
@@ -33,12 +33,12 @@ class MapsRepo {
           description: placeMap["description"],
         );
       }).toList();
-      XiamaLogger.debugPrint("${response.data}");
-      XiamaLogger.debugPrint("$places");
-      XiamaLogger.debugPrint("places ${places.length}");
+      AppLogger.debugPrint("${response.data}");
+      AppLogger.debugPrint("$places");
+      AppLogger.debugPrint("places ${places.length}");
       return places;
     } catch (e) {
-      XiamaLogger.debugPrint("An error occurred $e");
+      AppLogger.debugPrint("An error occurred $e");
     }
     return null;
   }

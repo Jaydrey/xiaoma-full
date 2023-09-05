@@ -331,7 +331,7 @@ class _RegistrationScreenState extends State<RegistrationScreen>
                             }
                             _registrationScreenStore.handleIsregistering(
                                 value: true);
-                            XiamaLogger.debugPrint(
+                            AppLogger.debugPrint(
                                 "isRegistering ${_registrationScreenStore.isRegistering}");
                             await Future.wait(
                               [
@@ -340,7 +340,7 @@ class _RegistrationScreenState extends State<RegistrationScreen>
                                   () {
                                     _registrationScreenStore
                                         .handleIsregistering(value: false);
-                                    XiamaLogger.debugPrint(
+                                    AppLogger.debugPrint(
                                         "isRegistering ${_registrationScreenStore.isRegistering}");
                                   },
                                 ),

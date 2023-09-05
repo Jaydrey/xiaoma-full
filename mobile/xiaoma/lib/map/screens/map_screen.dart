@@ -33,8 +33,8 @@ class _XiaoMapsState extends State<XiaoMaps> {
   Widget build(BuildContext context) {
     return Observer(
       builder: (_) {
-        XiamaLogger.debugPrint("pointA ${_mapScreenStore.pointA}");
-        XiamaLogger.debugPrint("pointB ${_mapScreenStore.pointB}");
+        AppLogger.debugPrint("pointA ${_mapScreenStore.pointA}");
+        AppLogger.debugPrint("pointB ${_mapScreenStore.pointB}");
         return GoogleMap(
           mapType: MapType.normal,
           initialCameraPosition: CameraPosition(
@@ -77,9 +77,9 @@ class _XiaoMapsState extends State<XiaoMaps> {
                           )).listen((event) {
                             _mapScreenStore.handleUserPosition(value: event);
                             _mapScreenStore.handleCurrentLocation();
-                            XiamaLogger.debugPrint(
+                            AppLogger.debugPrint(
                                 "stream lat :${_mapScreenStore.currentPosition?.latitude}");
-                            XiamaLogger.debugPrint(
+                            AppLogger.debugPrint(
                                 "stream lng :${_mapScreenStore.currentPosition?.longitude}");
                             if (_mapController != null) {
                               try {
@@ -87,7 +87,7 @@ class _XiaoMapsState extends State<XiaoMaps> {
                                     CameraUpdate.newLatLng(
                                         _mapScreenStore.currentLocation));
                               } catch (e) {
-                                XiamaLogger.debugPrint("camera move error $e");
+                                AppLogger.debugPrint("camera move error $e");
                               }
                             }
                           });

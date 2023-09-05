@@ -217,7 +217,7 @@ class _LoginScreenState extends State<LoginScreen> with ValidationMixins {
                       _formKey.currentState?.save();
 
                       _loginScreenStore.handleIsAuthenticating(value: true);
-                      XiamaLogger.debugPrint(
+                      AppLogger.debugPrint(
                           "isAuthentication ${_loginScreenStore.isAuthenticating}");
 
                       await Future.wait(
@@ -227,7 +227,7 @@ class _LoginScreenState extends State<LoginScreen> with ValidationMixins {
                             () {
                               _loginScreenStore.handleIsAuthenticating(
                                   value: false);
-                              XiamaLogger.debugPrint(
+                              AppLogger.debugPrint(
                                   "isAuthentication ${_loginScreenStore.isAuthenticating}");
                             },
                           ),

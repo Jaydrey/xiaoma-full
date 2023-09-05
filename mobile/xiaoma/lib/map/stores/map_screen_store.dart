@@ -240,7 +240,7 @@ abstract class _MapScreenStore with Store {
 
   @action
   Future<void> processUserBitmapIcon() async {
-    XiamaLogger.debugPrint("image $avatarPic");
+    AppLogger.debugPrint("image $avatarPic");
     final _imageBytes =
         await mapsFunctions.convertImagetoBytes(image: avatarPic);
     if (_imageBytes != null) {

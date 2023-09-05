@@ -14,7 +14,7 @@ class GoogleMapsFunctions {
           desiredAccuracy: LocationAccuracy.high);
       return position;
     } catch (e) {
-      XiamaLogger.debugPrint("Error $e");
+      AppLogger.debugPrint("Error $e");
     }
     return null;
   }
@@ -22,11 +22,11 @@ class GoogleMapsFunctions {
   Future<PermissionStatus> requestLocationPermission() async {
     final _permissionStatus = await Permission.location.request();
     if (_permissionStatus.isGranted) {
-      XiamaLogger.debugPrint("Location permission granted");
+      AppLogger.debugPrint("Location permission granted");
     } else if (_permissionStatus.isDenied) {
-      XiamaLogger.debugPrint('Location permission denied');
+      AppLogger.debugPrint('Location permission denied');
     } else if (_permissionStatus.isPermanentlyDenied) {
-      XiamaLogger.debugPrint('Location permission permanently denied');
+      AppLogger.debugPrint('Location permission permanently denied');
     }
 
     return _permissionStatus;
@@ -82,7 +82,7 @@ class GoogleMapsFunctions {
         .load(image)
         .then((value) => data = value)
         .catchError((error) {
-      XiamaLogger.debugPrint("Error occured $e");
+      AppLogger.debugPrint("Error occured $e");
     });
     final result = data?.buffer.asUint8List();
     return result;

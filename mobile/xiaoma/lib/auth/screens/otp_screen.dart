@@ -58,7 +58,7 @@ class _OtpScreenState extends State<OtpScreen> {
     setState(() {
       _isLoading = false;
     });
-    XiamaLogger.debugPrint("args ${widget.arguments}");
+    AppLogger.debugPrint("args ${widget.arguments}");
 
     if (!mounted) return;
     if (widget.arguments == null) return;
