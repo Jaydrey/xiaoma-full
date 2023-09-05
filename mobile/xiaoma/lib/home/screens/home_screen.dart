@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
@@ -8,7 +10,7 @@ import 'package:xiaoma/home/home.dart';
 import 'package:xiaoma/map/models/models.dart';
 import 'package:xiaoma/map/screens/map_screen.dart';
 import 'package:xiaoma/map/stores/map_screen_store.dart';
-import 'package:xiaoma/profile/profile.dart';
+// import 'package:xiaoma/profile/profile.dart';
 import 'package:xiaoma/app/themes/themes.dart';
 import 'package:xiaoma/utils/utils.dart';
 import 'package:xiaoma/widgets/widgets.dart';
@@ -38,7 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
           image: "assets/car-left.png");
     });
     super.initState();
-    // latestUserPostion();
   }
 
   @override
@@ -85,8 +86,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             _mapScreenStore.handleSelectedDestinationPlace(
                                 value: place);
                             _mapScreenStore.predictedPlaces.clear();
-                            XiamaLogger.debugPrint(
-                                "selected destination ${_mapScreenStore.selectedDestinationPlace}");
+                            AppLogger.debugPrint(
+                              "selected destination ${_mapScreenStore.selectedDestinationPlace}",
+                            );
                             if (_mapScreenStore.selectedDestinationPlace !=
                                     null &&
                                 _mapScreenStore.selectedSourcePlace != null) {
@@ -102,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             _mapScreenStore.handleSelectedSourcePlace(
                                 value: place);
                             _mapScreenStore.predictedPlaces.clear();
-                            XiamaLogger.debugPrint(
+                            AppLogger.debugPrint(
                                 "selected source ${_mapScreenStore.selectedSourcePlace}");
                             if (_mapScreenStore.selectedDestinationPlace !=
                                     null &&

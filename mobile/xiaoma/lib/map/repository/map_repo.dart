@@ -14,6 +14,7 @@ class MapsRepo {
     final params = {
       "input": query,
       "key": dotenv.env["XIAOMA_GOOGLE_API_KEY"],
+
       // "components": "country:ke",
     };
     const endpoint =
