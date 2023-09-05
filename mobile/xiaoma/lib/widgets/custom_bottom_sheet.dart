@@ -104,7 +104,10 @@ Future<void> mapSearchBottomSheet({
                           hasBorder: false,
                           suffixIcon: IconButton(
                             onPressed: () {},
-                            icon: const Icon(CupertinoIcons.map_pin_ellipse),
+                            icon: const Icon(
+                              CupertinoIcons.map_pin_ellipse,
+                              color: AppColors.grey3,
+                            ),
                           ),
                           onTap: () {
                             _mapScreenStore.handleSearchFieldStatus(
@@ -265,17 +268,29 @@ Widget destinationPlacesList({
     itemBuilder: (context, placeIndex) {
       final place = places[placeIndex];
       return ListTile(
-        leading: const Icon(CupertinoIcons.clock),
+        leading: const Icon(
+          CupertinoIcons.clock,
+          color: AppColors.grey3,
+        ),
         contentPadding:
             const EdgeInsets.only(right: 0, left: 0, top: 0, bottom: 0),
         title: Text(
           place.description ?? "",
+          style: const TextStyle(
+            color: AppColors.black1,
+          ),
         ),
         subtitle: Text(
           place.address ?? "",
+          style: const TextStyle(
+            color: AppColors.grey3,
+          ),
         ),
         trailing: Text(
           "${place.distance ?? ""} ${place.unit?.name ?? ""}",
+          style: const TextStyle(
+            color: AppColors.grey3,
+          ),
         ),
         onTap: () {
           controller.text = place.description ?? "";
@@ -299,17 +314,29 @@ Widget sourcePlacesList({
     itemBuilder: (context, placeIndex) {
       final place = places[placeIndex];
       return ListTile(
-        leading: const Icon(CupertinoIcons.clock),
+        leading: const Icon(
+          CupertinoIcons.clock,
+          color: AppColors.grey3,
+        ),
         contentPadding:
             const EdgeInsets.only(right: 0, left: 0, top: 0, bottom: 0),
         title: Text(
           place.description ?? "",
+          style: const TextStyle(
+            color: AppColors.black1,
+          ),
         ),
         subtitle: Text(
           place.address ?? "",
+          style: const TextStyle(
+            color: AppColors.grey3,
+          ),
         ),
         trailing: Text(
           "${place.distance ?? ""} ${place.unit?.name ?? ""}",
+          style: const TextStyle(
+            color: AppColors.grey3,
+          ),
         ),
         onTap: () {
           controller.text = place.description ?? "";
@@ -332,17 +359,29 @@ Widget savedPlacesList({
     itemBuilder: (context, placeIndex) {
       final place = places[placeIndex];
       return ListTile(
-        leading: const Icon(CupertinoIcons.clock),
+        leading: const Icon(
+          CupertinoIcons.clock,
+          color: AppColors.grey3,
+        ),
         contentPadding:
             const EdgeInsets.only(right: 0, left: 0, top: 0, bottom: 0),
         title: Text(
           place.description ?? "",
+          style: const TextStyle(
+            color: AppColors.black1,
+          ),
         ),
         subtitle: Text(
           place.address ?? "",
+          style: const TextStyle(
+            color: AppColors.grey3,
+          ),
         ),
         trailing: Text(
           "${place.distance ?? ""} ${place.unit?.name ?? ""}",
+          style: const TextStyle(
+            color: AppColors.grey3,
+          ),
         ),
         onTap: () {},
       );
