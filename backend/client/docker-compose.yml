@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  app:
+    build: .
+    volumes:
+     - .:/xiaoma-rider
+    ports:
+     - 8000:8000
+    image: app:xiaoma-rider
+    container_name: rider_container
+    command: python manage.py runserver 0.0.0.0:8000
+
+    
