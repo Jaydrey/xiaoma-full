@@ -22,9 +22,10 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'client.settings')
 url_paths = [
     path("ws/user_location/", UpdateUserCurrentLocationCOnsumer.as_asgi()),
 ]
+django_asgi_app = get_asgi_application()
 application = ProtocolTypeRouter(
     {
-        "http": get_asgi_application(),
+        "http": django_asgi_app,
         "websocket": URLRouter(url_paths)
     }
 )
