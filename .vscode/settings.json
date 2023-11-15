@@ -5,6 +5,7 @@
   "python.formatting.provider": "none",
   "cSpell.words": [
     "asgi",
+    "CALLERID",
     "codegen",
     "corsheaders",
     "cupertino",
@@ -17,12 +18,15 @@
     "locationmode",
     "mobx",
     "navs",
+    "PHONENUMBER",
     "pinput",
     "polyline",
     "Redoc",
     "simplejwt",
+    "SIZEBOX",
     "typeahead",
     "viewsets",
+    "XIAMA",
     "xiaoma"
   ]
 }
