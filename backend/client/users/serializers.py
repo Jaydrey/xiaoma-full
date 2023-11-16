@@ -1,70 +1,26 @@
 from django.utils import timezone
 from django.contrib.gis.geos import Point
+from django.contrib.auth import authenticate
 from rest_framework import serializers
 
-from .models import User, Gender  # Status
 
+from .models import (
+    User, 
+    Gender,
+)
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = (
-            "id",
-            "email",
-            "phone_number",
-            "username",
-            "first_name",
-            "last_name",
-            "profile_picture",
-            "date_of_birth",
-            "gender",
-            "is_active",
-            "created_at",
-        )
+        exclude = ("password",)
+        read_only_fields = ("created_at", "id", "last_login")
 
 
-class CreateUserSerializer(serializers.ModelSerializer):
-    gender = serializers.PrimaryKeyRelatedField(
-        queryset=Gender.objects.all(),
-        required=True,
-        allow_null=False,
-    )
-    current_location = serializers.JSONField()
-
+class GenderSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = (
-            "id",
-            "email",
-            "phone_number",
-            "username",
-            "first_name",
-            "last_name",
-            "profile_picture",
-            "date_of_birth",
-            "gender",
-            "current_location",
-            "is_active",
-            "created_at",
-        )
-        read_only_fields = (
-            "id",
-            "username",
-            "is_active",
-            "created_at",
-        )
-
-    def create(self, validated_data: dict):
-        current_location_data: dict = validated_data.pop(
-            "current_location", None)
-        if current_location_data:
-            latitude = current_location_data.get("lat")
-            longitude = current_location_data.get("lng")
-            current_location = Point(x=latitude, y=longitude)
-            validated_data["current_location"] = current_location
-        user: User | None = User.objects.create_user(**validated_data)
-        return user
-
+        model = Gender
+        fields = "__all__"
+        
 
 class CreateGenderSerializer(serializers.ModelSerializer):
     class Meta:
@@ -175,48 +131,22 @@ class UpdateUserEmailSerializer(serializers.ModelSerializer):
 
 
 class UpdateUserCurrentLocationSerializer(serializers.ModelSerializer):
-    current_location = serializers.JSONField()
-
     class Meta:
         model = User
         fields = ("id", "current_location")
 
     def update(self, instance: User, validated_data: dict):
+        print(f"{instance=}")
         if instance is None:
             raise ValueError("The user object is not found")
 
-        current_location_data: dict = validated_data.get(
+        current_location_data: str = validated_data.get(
             "current_location")
         if current_location_data is None:
             raise ValueError("Provide the current location")
 
-        latitude = current_location_data.get("lat")
-        longitude = current_location_data.get("lng")
-        print(f"{latitude=}, {longitude}")
-        current_location = Point(x=latitude, y=longitude)
-        print(current_location.coords)
-        instance.current_location = current_location
+        instance.current_location = current_location_data
         instance.updated_at = timezone.now()
         instance.save()
         # trigger the socket consumer to broadcast user's location
         return instance
-
-# class CreateStatusSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Status
-#         fields = ("id", "type")
-#         read_only_fields = ("id",)
-
-#     def validate(self, data: dict):
-#         status_type: str = data.get("type")
-#         if status_type is None:
-#             raise ValueError("Status type field is required")
-#         if Status.objects.filter(type=status_type.lower()).exists():
-#             raise ValueError("Status type with this name already exists")
-
-#         return data
-
-#     def create(self, validated_data: dict):
-#         status_type: str = validated_data.get("type")
-#         status = Status.objects.create(type=status_type.lower())
-#         return status
