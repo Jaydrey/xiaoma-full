@@ -24,7 +24,8 @@ from .serializers import (
     LoginResponseSerializer,
     ActivateAccountSerializer,
     ErrorSerializer,
-    EmailValidSerializer
+    EmailValidSerializer,
+    PhoneNumberValidSerializer
 )
 from users.serializers import (
     UserSerializer
@@ -100,10 +101,23 @@ class ValidateEmailAPIView(APIView):
         request=EmailValidSerializer,
         responses=EmailValidSerializer,
     )
-
     def post(self, request: Request, *args, **kwargs):
         data = request.data
         serializer = EmailValidSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        return Response(status=status.HTTP_200_OK)
+
+class ValidatePhoneNumberAPIView(APIView):
+    permission_classes = (AllowAny,)
+    serializer_class = PhoneNumberValidSerializer
+
+    @extend_schema(
+        request=PhoneNumberValidSerializer,
+        responses=PhoneNumberValidSerializer,
+    )
+    def post(self, request: Request, *args, **kwargs):
+        data = request.data
+        serializer = PhoneNumberValidSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         return Response(status=status.HTTP_200_OK)
 
