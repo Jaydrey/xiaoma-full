@@ -1,5 +1,5 @@
 from uuid import uuid4
-from django.contrib.gis.db import models
+from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -41,7 +41,7 @@ class Location(models.Model):
         Account, on_delete=models.DO_NOTHING, verbose_name=_("account"))
     mode = models.ForeignKey(
         LocationMode, on_delete=models.DO_NOTHING, verbose_name=_("location mode"))
-    location = models.PointField(_("location"), geography=True)
+    location = models.CharField(_("location"), max_length=50)
     created_at = models.DateTimeField(
         _("date created"), default=timezone.now, editable=False)
 
@@ -51,3 +51,4 @@ class Location(models.Model):
     @property
     def location_coords(self) -> dict:
         return {"lat": self.location.x, "lng": self.location.y, }
+
