@@ -7,17 +7,17 @@ from users.models import User
 
 class CreateTripSerializer(serializers.ModelSerializer):
     rider = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.filter(is_deleted=False),
+        queryset=User.objects.all(),
         required=True,
         allow_null=False,
     )
     driver = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.filter(is_deleted=False),
+        queryset=User.objects.all(),
         required=True,
         allow_null=False,
     )
     status = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.filter(is_deleted=False),
+        queryset=TripStatus.objects.all(),
         required=True,
         allow_null=False,
     )
@@ -46,9 +46,30 @@ class CreateTripSerializer(serializers.ModelSerializer):
         read_only_fields = ("id", "created_at",)
 
 
+class TripSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Trip
+        fields = "__all__"
+        read_only_fields = (
+            "id", 
+            "pickup_time", 
+            "dropoff_time", 
+            "order_time", 
+            "distance",
+            "fare",
+            "created_at",
+            "updated_at",
+            "status"
+        )
+
+class CancellationReasonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CancellationReason
+        fields = "__all__"
+
 class CreateTripStatusSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(
-        queryset=TripStatus.objects.all(),
+        queryset=User.objects.all(),
         required=True,
         allow_null=False,
     )
@@ -58,10 +79,13 @@ class CreateTripStatusSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "type",
-            "user",
         )
         read_only_fields = ("id",)
 
+class TripStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TripStatus
+        fields = "__all__"
 
 class CreateCancellationReasonSerializer(serializers.ModelSerializer):
     class Meta:
