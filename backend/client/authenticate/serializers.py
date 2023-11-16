@@ -103,3 +103,19 @@ class EmailValidSerializer(serializers.Serializer):
         
         return attrs
         
+
+class PhoneNumberValidSerializer(serializers.Serializer):
+    phone_number = serializers.CharField()
+
+    def validate(self, attrs: dict):
+        phone_number = attrs.get("phone_number")
+
+        try:
+            User.objects.get(phone_number=phone_number)
+        except Exception as e:
+            print(e)
+            raise serializers.ValidationError("account doesn't exist")
+        
+        return attrs
+    
+    
