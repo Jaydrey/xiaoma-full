@@ -1,15 +1,10 @@
 from graphene import (
     relay,
     UUID,
-    String,
-    Float,
-    Field,
     JSONString,
-    ObjectType
 )
 from graphene_django import DjangoObjectType
 
-import graphql_geojson
 
 
 # models
@@ -23,17 +18,18 @@ from .models import (
 class TripsType(DjangoObjectType):
     class Meta:
         model = Trip
-        exclude_fields = (
-            "rider",
-            "driver",
-            "pickup_time",
-            "distance",
-            "pickup_location",
-            "dropoff_location",
-            "cancellation_reason",
-            "created_at",
-            "updated_at",
-        )
+        # exclude_fields = (
+        #     "rider",
+        #     "driver",
+        #     "pickup_time",
+        #     "distance",
+        #     "pickup_location",
+        #     "dropoff_location",
+        #     "cancellation_reason",
+        #     "created_at",
+        #     "updated_at",
+        # )
+        fields = "__all__"
         interfaces = (relay.Node, )
     pickup_location_coords = JSONString()
     dropoff_location_coords = JSONString()

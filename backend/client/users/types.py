@@ -41,7 +41,6 @@ class UserType(DjangoObjectType):
             "gender",
             "current_location_coords",
             "is_active",
-            "status",
             "created_at",
         )
         interfaces = (relay.Node,)
