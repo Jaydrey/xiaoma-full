@@ -5,7 +5,8 @@ from .views import (
     LoginAPIView,
     RegistrationAPIView,
     ActivateAccountAPIView,
-    ValidateEmailAPIView
+    ValidateEmailAPIView,
+    ValidatePhoneNumberAPIView,
 )
 
 urlpatterns = [
@@ -13,4 +14,5 @@ urlpatterns = [
     path('register/', RegistrationAPIView.as_view(), name='register'),
     path('activate-account/', ActivateAccountAPIView.as_view(), name='activate-account'),
     path('validate-email/', ValidateEmailAPIView.as_view(), name='validate-email'),
+    path('validate-phonenumber/', ValidatePhoneNumberAPIView.as_view(), name='validate-phonenumber'),
 ]
