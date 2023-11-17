@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from .models import (
     AppSetting,
-    RideContact,
+    Contact,
     Language,
 )
 
@@ -11,10 +11,10 @@ class AppSettingAdmin(admin.ModelAdmin):
 
 admin.site.register(AppSetting, AppSettingAdmin)
 
-class RideContactAdmin(admin.ModelAdmin):
+class ContactAdmin(admin.ModelAdmin):
     pass
 
-admin.site.register(RideContact, RideContactAdmin)
+admin.site.register(Contact, ContactAdmin)
 
 class LanguageAdmin(admin.ModelAdmin):
     pass

@@ -3,7 +3,7 @@ from rest_framework import serializers
 # models
 from .models import (
     Language,
-    RideContact,
+    Contact,
     AppSetting,
 )
 
@@ -14,30 +14,22 @@ class LanguagesSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class RideContactsSerializer(serializers.ModelSerializer):
+class ContactsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = RideContact
-        fields = (
-            "id",
-            "contact_name",
-            "phone_number",
-        )
+        model = Contact
+        fields = "__all__"
 
 
 class RideContactSerializer(serializers.ModelSerializer):
     class Meta:
-        model = RideContact
+        model = Contact
         fields = "__all__"
 
 
 class AppSettingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = AppSetting
-        fields = (
-            "id",
-            "language",
-            "account",
-        )
+        fields = "__all__"
 
 
 class CreateLanguageSerializer(serializers.ModelSerializer):
@@ -49,7 +41,7 @@ class CreateLanguageSerializer(serializers.ModelSerializer):
 
 class CreateRideContactSerializer(serializers.ModelSerializer):
     class Meta:
-        model = RideContact
+        model = Contact
         fields = (
             "id", 
             "contact_name", 

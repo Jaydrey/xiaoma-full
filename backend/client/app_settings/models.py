@@ -22,20 +22,23 @@ class Language(models.Model):
     code = models.CharField(_("language code"), max_length=5, null=True)
 
 
-class RideContact(models.Model):
+class Contact(models.Model):
+    '''
+    Contacts of the riders that a ride can be shared with
+    '''
     class Meta:
-        default_related_name = _("ride_contact")
+        default_related_name = _("contacts")
         indexes = (
             models.Index(fields=("id","contact_name")),
         )
         ordering = ("-created_at",)
-        verbose_name = _("ride_contact")
-        verbose_name_plural = _("ride_contacts")
+        verbose_name = _("contact")
+        verbose_name_plural = _("contacts")
 
     id = models.UUIDField(default=uuid4, editable=False, primary_key=True)
     contact_name = models.CharField(_("contact name"), max_length=50,)
     phone_number = models.CharField(_("phone number"), max_length=14)
-    xiaoma_account = models.ForeignKey(Account, verbose_name=_("xiaoma account"), on_delete=models.DO_NOTHING, null=True, related_name="xiaoma_account")
+    account = models.ForeignKey(Account, verbose_name=_("xiaoma account"), on_delete=models.DO_NOTHING, null=True, related_name="xiaoma_account")
     rider_account = models.ForeignKey(Account, verbose_name=_("rider account"), on_delete=models.DO_NOTHING)
     created_at = models.DateTimeField(_("created at"), default=timezone.now, editable=False)
 
