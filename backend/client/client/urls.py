@@ -16,6 +16,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('auth/', include('authenticate.urls')),
     path('users/', include('users.urls')),
+    path('settings/', include('app_settings.urls')),
     path('trips/', include('trips.urls')),
     path("api/", csrf_exempt(GraphQLView.as_view(graphiql=False),),),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
