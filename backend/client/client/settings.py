@@ -26,6 +26,8 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'corsheaders',
     'rest_framework_simplejwt',
+    'django_otp',
+    'django_otp.plugins.otp_totp',
     # 'graphql_auth',
     'django_filters',
     'django_twilio',
@@ -46,6 +48,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django_otp.middleware.OTPMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -109,6 +112,12 @@ USE_TZ = config('USE_TZ', cast=bool)
 STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# backends
+AUTHENTICATION_BACKENDS = [
+    'django_otp.backends.OTPTokenBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 # emails
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
