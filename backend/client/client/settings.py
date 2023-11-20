@@ -21,7 +21,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # third party
-    'graphene_django',
+    # 'graphene_django',
     'rest_framework',
     'drf_spectacular',
     'corsheaders',
