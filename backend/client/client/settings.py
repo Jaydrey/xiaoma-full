@@ -115,8 +115,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # backends
 AUTHENTICATION_BACKENDS = [
-    'django_otp.backends.OTPTokenBackend',
     'django.contrib.auth.backends.ModelBackend',
+    # 'django_otp.backends.OTPTokenBackend',
 ]
 
 # emails

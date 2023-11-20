@@ -15,15 +15,13 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 # models
 from .models import (
-    Gender,
     User
 )
 
 # serializers
 from .serializers import (
     UserSerializer,
-    GenderSerializer,
-    CreateGenderSerializer,
+
 )
 
 # swagger
@@ -39,6 +37,3 @@ class UserViewSet(ModelViewSet):
     def create(self, request, *args, **kwargs):
         return None
         
-class GenderViewSet(ModelViewSet):
-    queryset = Gender.objects.all()
-    serializer_class = GenderSerializer

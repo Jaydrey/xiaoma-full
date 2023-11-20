@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import User, Gender
+from .models import User
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -9,10 +9,4 @@ class UserAdmin(admin.ModelAdmin):
 
 admin.site.register(User, UserAdmin)
 
-
-class GenderAdmin(admin.ModelAdmin):
-    pass
-
-
-admin.site.register(Gender, GenderAdmin)
 

@@ -26,27 +26,14 @@ class UserManager(BaseUserManager):
 # class choices
 
 
-class Gender(models.Model):
-    class Meta:
-        default_related_name = "genders"
-        indexes = (
-            models.Index(fields=("id", "type")),
-        )
-        ordering = ("type",)
-        verbose_name = "gender"
-        verbose_name_plural = "genders"
-
-    id = models.UUIDField(_("gender id"), default=uuid4,
-                          editable=False, primary_key=True)
-    type = models.CharField(_("gender type"), max_length=10, unique=True)
-    created_at = models.DateTimeField(
-        _("date created"), default=timezone.now, editable=False)
-
-    def __str__(self) -> str:
-        return f"{self.type}"
-
 
 class User(AbstractBaseUser, PermissionsMixin):
+    GENDER_CHOICES = (
+        ("male", "Male"),
+        ("female", "Female"),
+        ("other", "Other"),
+    )
+
     RIDER_ROLE = "rider"
     DRIVER_ROLE = "driver"
     ADMIN_ROLE = "admin"
@@ -73,8 +60,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(_("last name"), max_length=50, null=True, blank=True)
     profile_picture = models.URLField(_("profile picture"), null=True, blank=True)
     date_of_birth = models.DateField(_("date of birth"), null=True, blank=True)
-    gender = models.ForeignKey(
-        Gender, on_delete=models.DO_NOTHING, null=True, verbose_name=_("user's gender"), blank=True)
+    gender = models.CharField(_("gender"), max_length=10, choices=GENDER_CHOICES, default="male")
     current_location = models.CharField(
         _("current location"), max_length=50, null=True, blank=True)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default=RIDER_ROLE)

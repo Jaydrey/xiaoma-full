@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate
 from rest_framework import serializers
 
 
-from users.models import User, Gender  # Status
+from users.models import User  # Status
 from .models import PinCode
 
 
@@ -14,11 +14,6 @@ class LoginResponseSerializer(serializers.Serializer):
 
 
 class CreateUserSerializer(serializers.ModelSerializer):
-    gender = serializers.PrimaryKeyRelatedField(
-        queryset=Gender.objects.all(),
-        required=True,
-        allow_null=True,
-    )
 
     class Meta:
         model = User
@@ -62,10 +57,10 @@ class UserLoginSerializer(serializers.Serializer):
         phone_number = data.get("phone_number")
 
         if not password:
-            raise serializers.ValidationError("provide password for login")
+            return serializers.ValidationError("provide password for login")
 
         if phone_number is None and email is None:
-            raise serializers.ValidationError(
+            return serializers.ValidationError(
                 "provide either phone number or email for login")
         print(f'{data=}')
         print(f'{self.context.get("request")=}')
@@ -73,7 +68,7 @@ class UserLoginSerializer(serializers.Serializer):
             user = authenticate(request=self.context.get(
                 'request'), email=email, password=password)
             if not user:
-                raise serializers.ValidationError("Invalid email or password.")
+                return serializers.ValidationError("Invalid email or password.")
 
             return {
                 'user': user
@@ -82,7 +77,7 @@ class UserLoginSerializer(serializers.Serializer):
             user = User.objects.get(phone_number=phone_number)
 
             if not user:
-                raise serializers.ValidationError("Invalid otp.")
+                return serializers.ValidationError("Invalid otp.")
             return {
                 'user': user
             }

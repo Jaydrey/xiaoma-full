@@ -80,16 +80,18 @@ class LoginAPIView(TokenObtainPairView):
     def post(self, request: Request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            user: User = serializer.validated_data['user']
-            print(f'{user=}')
-            refresh = RefreshToken.for_user(user)
+            if serializer.validated_data['user']:
+                user: User = serializer.validated_data['user']
+                print(f'{user=}')
+                refresh = RefreshToken.for_user(user)
 
-            refresh["email"] = str(user.email)
+                refresh["email"] = str(user.email)
 
-            return Response({
-                'access': str(refresh.access_token),
-                'refresh': str(refresh),
-            }, status=status.HTTP_200_OK)
+                return Response({
+                    'access': str(refresh.access_token),
+                    'refresh': str(refresh),
+                }, status=status.HTTP_200_OK)
+            
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
 
 

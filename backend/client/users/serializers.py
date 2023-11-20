@@ -6,7 +6,6 @@ from rest_framework import serializers
 
 from .models import (
     User, 
-    Gender,
 )
 
 class UserSerializer(serializers.ModelSerializer):
@@ -15,32 +14,6 @@ class UserSerializer(serializers.ModelSerializer):
         exclude = ("password",)
         read_only_fields = ("created_at", "id", "last_login")
 
-
-class GenderSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Gender
-        fields = "__all__"
-        
-
-class CreateGenderSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Gender
-        fields = ("id", "type")
-        read_only_fields = ("id",)
-
-    def validate(self, data: dict):
-        gender_type: str = data.get("type")
-        if gender_type is None:
-            raise ValueError("Gender type field is required")
-        if Gender.objects.filter(type=gender_type.lower()).exists():
-            raise ValueError("Gender type with this name already exists")
-
-        return data
-
-    def create(self, validated_data: dict):
-        gender_type: str = validated_data.get("type")
-        gender = Gender.objects.create(type=gender_type.lower())
-        return gender
 
 
 class UpdateUserProfilePictureSerializer(serializers.ModelSerializer):
