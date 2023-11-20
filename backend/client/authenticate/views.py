@@ -62,8 +62,8 @@ class RegistrationAPIView(APIView):
         time.sleep(.25)
 
 
-        # user.is_active = True
-        # user.save()
+        user.is_active = True
+        user.save()
         serializer_user = UserSerializer(user)
         return Response(serializer_user.data, status=status.HTTP_201_CREATED)
 

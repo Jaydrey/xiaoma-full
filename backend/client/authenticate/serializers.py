@@ -7,10 +7,12 @@ from rest_framework import serializers
 from users.models import User, Gender  # Status
 from .models import PinCode
 
+
 class LoginResponseSerializer(serializers.Serializer):
     access = serializers.CharField()
     refresh = serializers.CharField()
-    
+
+
 class CreateUserSerializer(serializers.ModelSerializer):
     gender = serializers.PrimaryKeyRelatedField(
         queryset=Gender.objects.all(),
@@ -48,27 +50,45 @@ class CreateUserSerializer(serializers.ModelSerializer):
         return user
 
 
-
 class UserLoginSerializer(serializers.Serializer):
-    email = serializers.EmailField()
+    email = serializers.EmailField(required=False, allow_null=True)
     password = serializers.CharField(write_only=True)
+    phone_number = serializers.CharField(required=False, allow_null=True)
+    # otp = serializers.CharField(required=False, allow_null=True)
 
     def validate(self, data: dict):
         email = data.get('email')
         password = data.get('password')
+        phone_number = data.get("phone_number")
+
+        if not password:
+            raise serializers.ValidationError("provide password for login")
+
+        if phone_number is None and email is None:
+            raise serializers.ValidationError(
+                "provide either phone number or email for login")
         print(f'{data=}')
         print(f'{self.context.get("request")=}')
-        user = authenticate(request=self.context.get(
-            'request'), email=email, password=password)
+        if email:
+            user = authenticate(request=self.context.get(
+                'request'), email=email, password=password)
+            if not user:
+                raise serializers.ValidationError("Invalid email or password.")
+
+            return {
+                'user': user
+            }
+        if phone_number:
+            user = User.objects.get(phone_number=phone_number)
+
+            if not user:
+                raise serializers.ValidationError("Invalid otp.")
+            return {
+                'user': user
+            }
+
         print(user)
-
-        if not user:
-            raise serializers.ValidationError("Invalid email or password.")
-
-        return {
-            'user': user
-        }
-
+        return data
 
 class ActivateAccountSerializer(serializers.Serializer):
     pin_code = serializers.IntegerField()
@@ -81,16 +101,16 @@ class ActivateAccountSerializer(serializers.Serializer):
             attrs["pin"] = pin
         except Exception as e:
             raise serializers.ValidationError("pin doesn't exist")
-        
+
         return attrs
 
 
 class ErrorSerializer(serializers.Serializer):
     message = serializers.CharField()
 
+
 class EmailValidSerializer(serializers.Serializer):
     email = serializers.EmailField()
-
 
     def validate(self, attrs: dict):
         email = attrs.get("email")
@@ -100,9 +120,9 @@ class EmailValidSerializer(serializers.Serializer):
         except Exception as e:
             print(e)
             raise serializers.ValidationError("account doesn't exist")
-        
+
         return attrs
-        
+
 
 class PhoneNumberValidSerializer(serializers.Serializer):
     phone_number = serializers.CharField()
@@ -115,7 +135,5 @@ class PhoneNumberValidSerializer(serializers.Serializer):
         except Exception as e:
             print(e)
             raise serializers.ValidationError("account doesn't exist")
-        
+
         return attrs
-    
-    
