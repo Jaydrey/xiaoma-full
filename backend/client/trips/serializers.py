@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 # models
-from .models import Trip, TripStatus, CancellationReason
+from .models import Trip, CancellationReason
 from users.models import User
 
 
@@ -13,11 +13,6 @@ class CreateTripSerializer(serializers.ModelSerializer):
     )
     driver = serializers.PrimaryKeyRelatedField(
         queryset=User.objects.all(),
-        required=True,
-        allow_null=False,
-    )
-    status = serializers.PrimaryKeyRelatedField(
-        queryset=TripStatus.objects.all(),
         required=True,
         allow_null=False,
     )
@@ -67,26 +62,6 @@ class CancellationReasonSerializer(serializers.ModelSerializer):
         model = CancellationReason
         fields = "__all__"
 
-class CreateTripStatusSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.all(),
-        required=True,
-        allow_null=False,
-    )
-
-    class Meta:
-        model = TripStatus
-        fields = (
-            "id",
-            "type",
-        )
-        read_only_fields = ("id",)
-
-class TripStatusSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TripStatus
-        fields = "__all__"
-
 class CreateCancellationReasonSerializer(serializers.ModelSerializer):
     class Meta:
         model = CancellationReason
@@ -108,12 +83,6 @@ class UpdateTripSerializer(serializers.ModelSerializer):
             "fare",
             "dropoff_time",
         )
-
-
-class UpdateTripStatus(serializers.ModelSerializer):
-    class Meta:
-        model = TripStatus
-        fields = ("id", "type")
 
 
 class CancelTripSerializer(serializers.ModelSerializer):

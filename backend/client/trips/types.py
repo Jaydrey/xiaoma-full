@@ -10,7 +10,6 @@ from graphene_django import DjangoObjectType
 # models
 from .models import (
     Trip,
-    TripStatus,
     CancellationReason,
 )
 

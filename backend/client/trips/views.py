@@ -11,14 +11,12 @@ from rest_framework.permissions import AllowAny
 from .serializers import (
     TripSerializer,
     CancellationReasonSerializer,
-    TripStatusSerializer,
 )
 
 # models
 from .models import (
     CancellationReason,
     Trip,
-    TripStatus,
 )
 
 
@@ -30,9 +28,5 @@ class CancellationReasonViewSet(ModelViewSet):
     queryset = CancellationReason.objects.all()
     serializer_class = CancellationReasonSerializer
 
-
-class TripStatusViewSet(ModelViewSet):
-    queryset = TripStatus.objects.all()
-    serializer_class = TripStatusSerializer
 
     
