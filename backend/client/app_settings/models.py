@@ -12,7 +12,7 @@ class Language(models.Model):
     class Meta:
         default_related_name = _("language")
         indexes = (
-            models.Index(fields=("id","name")),
+            models.Index(fields=("id", "name")),
         )
         verbose_name = _("language")
         verbose_name_plural = _("languages")
@@ -29,7 +29,7 @@ class Contact(models.Model):
     class Meta:
         default_related_name = _("contacts")
         indexes = (
-            models.Index(fields=("id","contact_name")),
+            models.Index(fields=("id", "contact_name")),
         )
         ordering = ("-created_at",)
         verbose_name = _("contact")
@@ -38,11 +38,12 @@ class Contact(models.Model):
     id = models.UUIDField(default=uuid4, editable=False, primary_key=True)
     contact_name = models.CharField(_("contact name"), max_length=50,)
     phone_number = models.CharField(_("phone number"), max_length=14)
-    account = models.ForeignKey(Account, verbose_name=_("xiaoma account"), on_delete=models.DO_NOTHING, null=True, related_name="xiaoma_account")
-    rider_account = models.ForeignKey(Account, verbose_name=_("rider account"), on_delete=models.DO_NOTHING)
-    created_at = models.DateTimeField(_("created at"), default=timezone.now, editable=False)
-
-    
+    account = models.ForeignKey(Account, verbose_name=_(
+        "xiaoma account"), on_delete=models.DO_NOTHING, null=True, related_name="xiaoma_account")
+    rider_account = models.ManyToManyField(
+        Account, verbose_name=_("rider account"))
+    created_at = models.DateTimeField(
+        _("created at"), default=timezone.now, editable=False)
 
 
 class AppSetting(models.Model):
@@ -53,7 +54,9 @@ class AppSetting(models.Model):
         verbose_name_plural = _("app_settings")
 
     id = models.UUIDField(default=uuid4, editable=False, primary_key=True)
-    language = models.ForeignKey(Language, verbose_name=_("language"), on_delete=models.DO_NOTHING)
-    account = models.ForeignKey(Account, on_delete=models.DO_NOTHING, related_name="app_account")
-    created_at = models.DateTimeField(_("created at"), default=timezone.now, editable=False)
-
+    language = models.ForeignKey(Language, verbose_name=_(
+        "language"), on_delete=models.DO_NOTHING)
+    account = models.ForeignKey(
+        Account, on_delete=models.DO_NOTHING, related_name="app_account")
+    created_at = models.DateTimeField(
+        _("created at"), default=timezone.now, editable=False)
