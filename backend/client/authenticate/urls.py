@@ -12,7 +12,7 @@ from .views import (
 urlpatterns = [
     path('login/', LoginAPIView.as_view(), name='login'),
     path('register/', RegistrationAPIView.as_view(), name='register'),
-    path('activate-account/', ActivateAccountAPIView.as_view(), name='activate-account'),
+    path('activate-account/<str:user_id>/', ActivateAccountAPIView.as_view(), name='activate-account'),
     path('validate-email/', ValidateEmailAPIView.as_view(), name='validate-email'),
     path('validate-phonenumber/', ValidatePhoneNumberAPIView.as_view(), name='validate-phonenumber'),
 ]

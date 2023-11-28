@@ -35,12 +35,6 @@ from drf_spectacular.utils import (
     extend_schema,
 )
 
-# utils
-from .utils import (
-    generate_code,
-    registration_email
-)
-
 
 # Register Endpoint
 class RegistrationAPIView(APIView):
@@ -58,12 +52,8 @@ class RegistrationAPIView(APIView):
 
         serializer.is_valid(raise_exception=True)
 
-        user:User = serializer.save()
-        time.sleep(.25)
+        user: User = serializer.save()
 
-
-        user.is_active = True
-        user.save()
         serializer_user = UserSerializer(user)
         return Response(serializer_user.data, status=status.HTTP_201_CREATED)
 
@@ -79,19 +69,22 @@ class LoginAPIView(TokenObtainPairView):
     )
     def post(self, request: Request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            if serializer.validated_data['user']:
-                user: User = serializer.validated_data['user']
-                print(f'{user=}')
-                refresh = RefreshToken.for_user(user)
+        serializer.is_valid(raise_exception=True)
+        # return Response({"errors": serializer.error_messages}, status=status.HTTP_401_UNAUTHORIZED)
 
-                refresh["email"] = str(user.email)
+        print(serializer.validated_data)
+        user = serializer.validated_data.get("user")
+        if isinstance(user, User):
+            print(f'{user=}')
+            refresh = RefreshToken.for_user(user)
 
-                return Response({
-                    'access': str(refresh.access_token),
-                    'refresh': str(refresh),
-                }, status=status.HTTP_200_OK)
-            
+            refresh["email"] = str(user.email)
+
+            return Response({
+                'access': str(refresh.access_token),
+                'refresh': str(refresh),
+            }, status=status.HTTP_200_OK)
+
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
 
 
@@ -108,6 +101,7 @@ class ValidateEmailAPIView(APIView):
         serializer = EmailValidSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         return Response(status=status.HTTP_200_OK)
+
 
 class ValidatePhoneNumberAPIView(APIView):
     permission_classes = (AllowAny,)
@@ -126,14 +120,14 @@ class ValidatePhoneNumberAPIView(APIView):
 
 class ActivateAccountAPIView(APIView):
     permission_classes = (AllowAny,)
-    
+
     def get_object(self, user_id: str):
         try:
             return User.objects.get(id=user_id)
         except Exception as e:
             print(e)
             return None
-    
+
     @extend_schema(
         request=ActivateAccountSerializer,
         responses={200: UserSerializer, 400: ErrorSerializer},
@@ -142,16 +136,15 @@ class ActivateAccountAPIView(APIView):
         user = self.get_object(user_id)
 
         if user is None:
-            serializer = ErrorSerializer(data={"message": f"user id {user_id} doesn't exist"})
+            serializer = ErrorSerializer(
+                data={"message": f"user id {user_id} doesn't exist"})
             return Response(serializer.data, status=status.HTTP_404_NOT_FOUND)
-        
+
         data = request.data
         serializer = ActivateAccountSerializer(data=data)
         serializer.is_valid(raise_exception=True)
-        
+
         user.is_active = True
         user.save()
         serializer = UserSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-
