@@ -57,18 +57,19 @@ class UserLoginSerializer(serializers.Serializer):
         phone_number = data.get("phone_number")
 
         if not password:
-            return serializers.ValidationError("provide password for login")
+            raise serializers.ValidationError("provide password for login")
 
         if phone_number is None and email is None:
-            return serializers.ValidationError(
+            raise serializers.ValidationError(
                 "provide either phone number or email for login")
         print(f'{data=}')
-        print(f'{self.context.get("request")=}')
+        
         if email:
             user = authenticate(request=self.context.get(
                 'request'), email=email, password=password)
             if not user:
-                return serializers.ValidationError("Invalid email or password.")
+                raise serializers.ValidationError("Invalid email or password.")
+            print(f"user {user}")
 
             return {
                 'user': user
@@ -77,7 +78,7 @@ class UserLoginSerializer(serializers.Serializer):
             user = User.objects.get(phone_number=phone_number)
 
             if not user:
-                return serializers.ValidationError("Invalid otp.")
+                raise serializers.ValidationError("Invalid otp.")
             return {
                 'user': user
             }
@@ -132,3 +133,4 @@ class PhoneNumberValidSerializer(serializers.Serializer):
             raise serializers.ValidationError("account doesn't exist")
 
         return attrs
+
