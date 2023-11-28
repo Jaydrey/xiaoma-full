@@ -47,7 +47,7 @@ The Xiaoma Team.
 
 def generate_code() -> int:
     while True:
-        pin_code = ''.join(str(randrange(10)) for _ in range(6))
+        pin_code = ''.join(str(randrange(10)) for _ in range(4))
         pin = PinCode.objects.filter(pin=int(pin_code))
         if not pin.exists():
             PinCode.objects.create(pin=int(pin_code))

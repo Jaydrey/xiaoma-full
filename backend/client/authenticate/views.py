@@ -138,6 +138,7 @@ class ActivateAccountAPIView(APIView):
         if user is None:
             serializer = ErrorSerializer(
                 data={"message": f"user id {user_id} doesn't exist"})
+            serializer.is_valid()
             return Response(serializer.data, status=status.HTTP_404_NOT_FOUND)
 
         data = request.data
@@ -148,3 +149,4 @@ class ActivateAccountAPIView(APIView):
         user.save()
         serializer = UserSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
