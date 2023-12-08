@@ -27,8 +27,9 @@ from .serializers import (
     EmailValidSerializer,
     PhoneNumberValidSerializer
 )
+
 from users.serializers import (
-    UserSerializer
+    UserSerializer,
 )
 # swagger
 from drf_spectacular.utils import (
