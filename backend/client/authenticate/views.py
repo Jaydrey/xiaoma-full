@@ -36,6 +36,10 @@ from drf_spectacular.utils import (
     extend_schema,
 )
 
+from .utils import (
+    generate_code,
+    registration_email
+)
 
 # Register Endpoint
 class RegistrationAPIView(APIView):
@@ -151,3 +155,36 @@ class ActivateAccountAPIView(APIView):
         serializer = UserSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+
+class ResendOTPAPIView(APIView):
+    permission_classes = (AllowAny,)
+
+    def get_object(self, user_id: str):
+        try:
+            return User.objects.get(id=user_id)
+        except Exception as e:
+            print(e)
+            return None
+
+    @extend_schema(
+        request=None,
+        responses=str,
+    )
+    def get(self, request: Request, user_id: str, *args, **kwargs):
+        user = self.get_object(user_id)
+
+        if user is None:
+            serializer = ErrorSerializer(
+                data={"message": f"user id {user_id} doesn't exist"})
+            serializer.is_valid()
+            return Response(serializer.data, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            account = Account.objects.get(user=user)
+        except Exception as e:
+            print(e)
+            return Response("user doesn't have an account", status=status.HTTP_401_UNAUTHORIZED)
+
+        pin = generate_code()
+        registration_email(account, pin)
+        return Response("email sent successfully", status=status.HTTP_200_OK)

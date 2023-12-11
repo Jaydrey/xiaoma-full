@@ -7,6 +7,7 @@ from .views import (
     ActivateAccountAPIView,
     ValidateEmailAPIView,
     ValidatePhoneNumberAPIView,
+    ResendOTPAPIView
 )
 
 urlpatterns = [
@@ -15,4 +16,5 @@ urlpatterns = [
     path('activate-account/<str:user_id>/', ActivateAccountAPIView.as_view(), name='activate-account'),
     path('validate-email/', ValidateEmailAPIView.as_view(), name='validate-email'),
     path('validate-phonenumber/', ValidatePhoneNumberAPIView.as_view(), name='validate-phonenumber'),
+    path('resend-otp/<str:user_id>/', ResendOTPAPIView.as_view(), name='resend-otp'),
 ]
