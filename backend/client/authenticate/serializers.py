@@ -127,10 +127,10 @@ class PhoneNumberValidSerializer(serializers.Serializer):
         phone_number = attrs.get("phone_number")
 
         try:
-            User.objects.get(phone_number=phone_number)
+            user = User.objects.get(phone_number=phone_number)
         except Exception as e:
             print(e)
             raise serializers.ValidationError("account doesn't exist")
-
+        attrs["user_id"] = user.id
         return attrs
 

@@ -114,13 +114,13 @@ class ValidatePhoneNumberAPIView(APIView):
 
     @extend_schema(
         request=PhoneNumberValidSerializer,
-        responses=PhoneNumberValidSerializer,
+        responses={200: dict},
     )
     def post(self, request: Request, *args, **kwargs):
         data = request.data
         serializer = PhoneNumberValidSerializer(data=data)
         serializer.is_valid(raise_exception=True)
-        return Response(status=status.HTTP_200_OK)
+        return Response(serializer.validated_data, status=status.HTTP_200_OK)
 
 
 class ActivateAccountAPIView(APIView):
@@ -188,3 +188,35 @@ class ResendOTPAPIView(APIView):
         pin = generate_code()
         registration_email(account, pin)
         return Response("email sent successfully", status=status.HTTP_200_OK)
+
+
+class ConfirmOTPAPIView(APIView):
+    permission_classes = (AllowAny,)
+
+    def get_object(self, user_id: str):
+        try:
+            return User.objects.get(id=user_id)
+        except Exception as e:
+            print(e)
+            return None
+
+    @extend_schema(
+        request=ActivateAccountSerializer,
+        responses={200: str},
+    )
+    def post(self, request: Request, user_id: str, *args, **kwargs):
+        user = self.get_object(user_id)
+
+        if user is None:
+            serializer = ErrorSerializer(
+                data={"message": f"user id {user_id} doesn't exist"})
+            serializer.is_valid()
+            return Response(serializer.data, status=status.HTTP_404_NOT_FOUND)
+        
+        data = request.data
+        serializer = ActivateAccountSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+
+        return Response("otp valid", status=status.HTTP_200_OK)
+    
+

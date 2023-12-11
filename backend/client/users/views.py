@@ -32,6 +32,7 @@ from drf_spectacular.utils import (
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = (AllowAny,)
 
     @extend_schema(exclude=True)
     def create(self, request, *args, **kwargs):
