@@ -14,6 +14,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 # views
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+
+
 # models
 from .models import (
     User
@@ -35,6 +37,13 @@ class UserViewSet(ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = (AllowAny,)
 
+    def get_serializer_class(self):
+        return super().get_serializer_class()
+
+    @extend_schema(
+        request=UpdateUserNameSerializer,
+        responses=str,
+    )
     @action(methods=['post'], detail=True)
     def update_fullname(self, request: Request, id:str = None, *args, **kwargs):
         if id is None:
