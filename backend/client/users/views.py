@@ -36,16 +36,21 @@ class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (AllowAny,)
+        
 
-    def get_serializer_class(self):
-        return super().get_serializer_class()
+    @extend_schema(exclude=True)
+    def create(self, request, *args, **kwargs):
+        return None
+        
+
+class UpdateFullNameAPIView(APIView):
+    permission_classes = (AllowAny,)
 
     @extend_schema(
         request=UpdateUserNameSerializer,
         responses=str,
     )
-    @action(methods=['post'], detail=True)
-    def update_fullname(self, request: Request, id:str = None, *args, **kwargs):
+    def put(self, request: Request, id: str=None, *args, **kwargs):
         if id is None:
             return Response("user id is missing", status=status.HTTP_400_BAD_REQUEST)
         
@@ -59,8 +64,3 @@ class UserViewSet(ModelViewSet):
 
         serializer.save()
         return Response("updated full name successfully", status=status.HTTP_200_OK)
-
-    @extend_schema(exclude=True)
-    def create(self, request, *args, **kwargs):
-        return None
-        
