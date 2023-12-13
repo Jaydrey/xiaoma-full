@@ -7,7 +7,6 @@ from .models import User, Gender
 class RidersFilter(FilterSet):
     first_name = django_filters.CharFilter(lookup_expr="icontains")
     last_name = django_filters.CharFilter(lookup_expr="icontains")
-    username = django_filters.CharFilter(lookup_expr="icontains")
     is_active = django_filters.BooleanFilter()
 
     class Meta:
@@ -15,17 +14,17 @@ class RidersFilter(FilterSet):
         fields = (
             "first_name",
             "last_name",
-            "username",
             "is_active",
         )
 
 
 class RiderFilter(FilterSet):
     id = django_filters.CharFilter(lookup_expr="exact")
+    username = django_filters.CharFilter(lookup_expr="contains")
 
     class Meta:
         model = User
-        fields = ("id",)
+        fields = ("id", "username")
 
 
 class GenderFilter(FilterSet):

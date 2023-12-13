@@ -30,8 +30,6 @@ from .filters import (
 )
 
 
-
-
 class Mutation(graphene.ObjectType):
     create_user = CreateUserMutation.Field()
     create_gender = CreateGenderMutation.Field()

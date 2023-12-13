@@ -3,10 +3,10 @@ from uuid import uuid4
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
-from django.contrib.gis.db import models
+from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from users.models import User
+from accounts.models import Account
 
 
 class CancellationReason(models.Model):
@@ -24,27 +24,14 @@ class CancellationReason(models.Model):
     created_at = models.DateTimeField(default=timezone.now, editable=False)
 
 
-class TripStatus(models.Model):
-    class Meta:
-        default_related_name = _("trip_statuses")
-        indexes = (
-            models.Index(fields=("id",)),
-        )
-        ordering = ("-created_at",)
-        verbose_name = _("trip_status")
-        verbose_name_plural = _("trip_statuses")
-
-    id = models.UUIDField(default=uuid4, editable=False, primary_key=True)
-    type = models.CharField(max_length=10, unique=True)
-    user = models.ForeignKey(
-        User, on_delete=models.DO_NOTHING, null=True)
-    created_at = models.DateTimeField(default=timezone.now, editable=False)
-
-    def __str__(self) -> str:
-        return f"{self.type}"
-
 
 class Trip(models.Model):
+    STATUS_CHOICES = (
+        ("booked", "Booked"),
+        ("cancelled", "Cancelled"),
+        ("en-route", "En-Route"),
+        ("completed", "Completed"),
+    )
     class Meta:
         default_related_name = _("trips")
         indexes = (
@@ -56,19 +43,19 @@ class Trip(models.Model):
 
     id = models.UUIDField(default=uuid4, editable=False, primary_key=True)
     rider = models.ForeignKey(
-        User, on_delete=models.DO_NOTHING, related_name=_("trips_as_rider"))
+        Account, on_delete=models.DO_NOTHING, related_name=_("trips_as_rider"))
     driver = models.ForeignKey(
-        User, on_delete=models.DO_NOTHING, related_name=_("trips_as_driver"))
-    status = models.ForeignKey(TripStatus, on_delete=models.DO_NOTHING)
+        Account, on_delete=models.DO_NOTHING, related_name=_("trips_as_driver"))
+    status = models.CharField(_("status"), max_length=15, choices=STATUS_CHOICES, default="booked")
     cancellation_reason = models.ForeignKey(
         CancellationReason, on_delete=models.DO_NOTHING, null=True)
-    pickup_location = models.PointField(geography=True)
-    dropoff_location = models.PointField(geography=True)
+    pickup_location = models.CharField(_("pick up location"), max_length=50)
+    dropoff_location = models.CharField(_("drop off location"), max_length=50)
     pickup_time = models.DateTimeField(null=True)
     dropoff_time = models.DateTimeField(null=True)
     order_time = models.DateTimeField(default=timezone.now)
-    distance = models.FloatField()  # in kilometers
-    fare = models.DecimalField(max_digits=5, decimal_places=1)
+    distance = models.DecimalField(max_digits=10, decimal_places=2, null=True)  # in kilometers
+    fare = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     created_at = models.DateTimeField(default=timezone.now, editable=False)
     updated_at = models.DateTimeField(editable=False, default=timezone.now)
 
@@ -88,11 +75,13 @@ class Trip(models.Model):
 
     @property
     def pickup_location_coords(self) -> dict:
-        return {"lat": self.pickup_location.x, "lng": self.pickup_location.y}
+        lat,lng = self.pickup_location.split(",")
+        return {"lat": lat, "lng": lng}
 
     @property
     def dropoff_location_coords(self) -> dict:
-        return {"lat": self.dropoff_location.x, "lng": self.dropoff_location.y}
+        lat,lng = self.dropoff_location.split(",")
+        return {"lat": lat, "lng": lng}
 
     @property
     def waiting_time(self):
@@ -116,9 +105,9 @@ class Trip(models.Model):
     @property
     def current_ride_location(self) -> dict:
         """Determined by the location of the driver and rider"""
-        driver_location = self.driver.current_location
-        rider_location = self.rider.current_location
+        driver_location = self.driver.current_location_coords
+        rider_location = self.rider.current_location_coords
         return {
-            "driver": {"lat": driver_location.x, "lng": driver_location.y},
-            "rider": {"lat": rider_location.x, "lng": rider_location.y},
+            "driver": driver_location,
+            "rider": rider_location,
         }

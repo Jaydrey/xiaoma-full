@@ -8,8 +8,7 @@ import 'package:xiaoma/app/app.dart';
 import 'package:xiaoma/auth/auth.dart';
 import 'package:xiaoma/dashboard/screens/dashboard_screen.dart';
 import 'package:xiaoma/onboarding/onboarding.dart';
-// utils
-import 'package:xiaoma/utils/utils.dart';
+
 
 
 

@@ -30,6 +30,9 @@ dependencies:
   sliding_up_panel: ^2.0.0+1
   shared_preferences: ^2.2.0
   package_info: ^2.0.2
+  connectivity: ^3.0.6
+  connectivity_plus: ^4.0.2
+  graphql_flutter: ^5.0.0-nullsafety.5
 
 dev_dependencies:
   build_runner: ^2.3.3

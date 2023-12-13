@@ -4,7 +4,6 @@ from django_filters import FilterSet
 # models
 from .models import (
     Trip,
-    TripStatus,
     CancellationReason
 )
 
@@ -29,15 +28,6 @@ class TripFilter(FilterSet):
     class Meta:
         model = Trip
         fields = ("id",)
-
-
-class TripStatusFilter(FilterSet):
-    id = django_filters.CharFilter(lookup_expr="exact")
-    type = django_filters.CharFilter(lookup_expr="exact")
-
-    class Meta:
-        model = TripStatus
-        fields = ("id", "type")
 
 
 class CancellationReasonFilter(FilterSet):

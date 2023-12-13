@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Trip, TripStatus, CancellationReason
+from .models import Trip, CancellationReason
 
 
 class TripAdmin(admin.ModelAdmin):
@@ -16,13 +16,6 @@ class TripAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Trip, TripAdmin)
-
-
-class TripStatusAdmin(admin.ModelAdmin):
-    pass
-
-
-admin.site.register(TripStatus, TripStatusAdmin)
 
 
 class CancellationReasonAdmin(admin.ModelAdmin):

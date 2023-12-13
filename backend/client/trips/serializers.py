@@ -1,23 +1,18 @@
 from rest_framework import serializers
 
 # models
-from .models import Trip, TripStatus, CancellationReason
+from .models import Trip, CancellationReason
 from users.models import User
 
 
 class CreateTripSerializer(serializers.ModelSerializer):
     rider = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.filter(is_deleted=False),
+        queryset=User.objects.all(),
         required=True,
         allow_null=False,
     )
     driver = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.filter(is_deleted=False),
-        required=True,
-        allow_null=False,
-    )
-    status = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.filter(is_deleted=False),
+        queryset=User.objects.all(),
         required=True,
         allow_null=False,
     )
@@ -46,22 +41,26 @@ class CreateTripSerializer(serializers.ModelSerializer):
         read_only_fields = ("id", "created_at",)
 
 
-class CreateTripStatusSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(
-        queryset=TripStatus.objects.all(),
-        required=True,
-        allow_null=False,
-    )
-
+class TripSerializer(serializers.ModelSerializer):
     class Meta:
-        model = TripStatus
-        fields = (
-            "id",
-            "type",
-            "user",
+        model = Trip
+        fields = "__all__"
+        read_only_fields = (
+            "id", 
+            "pickup_time", 
+            "dropoff_time", 
+            "order_time", 
+            "distance",
+            "fare",
+            "created_at",
+            "updated_at",
+            "status"
         )
-        read_only_fields = ("id",)
 
+class CancellationReasonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CancellationReason
+        fields = "__all__"
 
 class CreateCancellationReasonSerializer(serializers.ModelSerializer):
     class Meta:
@@ -84,12 +83,6 @@ class UpdateTripSerializer(serializers.ModelSerializer):
             "fare",
             "dropoff_time",
         )
-
-
-class UpdateTripStatus(serializers.ModelSerializer):
-    class Meta:
-        model = TripStatus
-        fields = ("id", "type")
 
 
 class CancelTripSerializer(serializers.ModelSerializer):

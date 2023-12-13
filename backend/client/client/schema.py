@@ -17,11 +17,17 @@ from locations.schema import (
     Query as LocationQuery,
 )
 
+from app_settings.schema import (
+    Mutation as AppSettingMutation,
+    Query as AppSettingQuery,
+)
+
 
 class Mutation(
     LocationMutation,
     UserAppMutation,
     TripAppMutation,
+    AppSettingMutation,
 ):
     pass
 
@@ -30,6 +36,7 @@ class Query(
     LocationQuery,
     TripAppQuery,
     UserAppQuery,
+    AppSettingQuery,
 ):
     pass
 
